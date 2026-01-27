@@ -6,12 +6,14 @@ const { google } = require('googleapis');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:3000';
+
 
 
 
 // === 미들웨어 설정 ===
 app.use(cors({
-  origin: 'http://localhost:3000', // 프론트엔드 주소 (Vite 기본 포트)
+  origin: ORIGIN_URL, // 프론트엔드 주소 (Vite 기본 포트)
   credentials: true, // 쿠키 주고받기 허용 (필수)
 }));
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
