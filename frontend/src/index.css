@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+body{
+  background: #111827;
+}
+
+/* Webkit 브라우저 (Chrome, Safari, Edge) 스크롤바 스타일 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* 스크롤바 너비 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #111827; /* 트랙 색상 (gray-900) */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* 핸들 색상 (gray-600) */
+  border-radius: 4px; /* 둥근 모서리 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* 호버 시 색상 (gray-500) */
+}
