@@ -40,10 +40,11 @@ app.post('/api/auth/google', async (req, res) => {
     if (tokens.refresh_token) {
       console.log('Refresh Token to use:', tokens.refresh_token);
       // 3. 리프레시 토큰을 쿠키에 저장 (보안 옵션 필수)
+      const isProd = process.env.NODE_ENV === 'production';
       res.cookie('refreshToken', tokens.refresh_token, {
         httpOnly: true,  // 자바스크립트로 접근 불가 (XSS 방지)
-        secure: false, // 배포 시엔 HTTPS 필수
-        sameSite: 'lax', // CSRF 방지
+        secure: isProd,  // 배포 시(HTTPS) 필수
+        sameSite: isProd ? 'none' : 'lax', // 크로스 도메인 쿠키 전송을 위해 배포 시 'none' 필요
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30일
         path: '/',
       });
