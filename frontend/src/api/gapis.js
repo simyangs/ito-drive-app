@@ -3,8 +3,10 @@ import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 const TOKEN_STORAGE_KEY = 'google-drive-app-token';
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
@@ -40,7 +42,7 @@ apiClient.interceptors.response.use(
         console.log('토큰만료 재발급 시도');
 
         const {data} = await axios.post(
-          '/api/auth/refresh',
+          `${BASE_URL}/auth/refresh`,
           {},
           {withCredentials: true}
         );
