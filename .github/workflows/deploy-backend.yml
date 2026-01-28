@@ -34,6 +34,7 @@ jobs:
           name: 'express-app-func'             # 배포될 함수 이름
           runtime: 'nodejs20'                  # Node.js 버전
           region: 'asia-northeast3'            # 서울 리전
+          source_dir: 'backend'
           entry_point: 'itoAuth'          # index.js에서 export한 변수명
           gen2: true                           # 2세대(Cloud Run Functions) 사용
           allow_unauthenticated: true          # 퍼블릭 접속 허용 (필요 시 false)
