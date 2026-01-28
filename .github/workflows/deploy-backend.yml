@@ -1,0 +1,47 @@
+name: Deploy Express App to Cloud Run Functions
+
+on:
+  push:
+    branches:
+      - main  # 코드가 main 브랜치에 push될 때 실행됩니다.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # WIF 인증을 위해 id-token 권한이 반드시 필요합니다.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          # 우리가 설정한 WIF 프로바이더 경로 (camelCase 주의!)
+          workload_identity_provider: 'projects/499796289115/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: '499796289115-compute@developer.gserviceaccount.com'
+
+      - name: 'Deploy to Cloud Run Functions'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloud-functions@v2'
+        with:
+          name: 'express-app-func'             # 배포될 함수 이름
+          runtime: 'nodejs20'                  # Node.js 버전
+          region: 'asia-northeast3'            # 서울 리전
+          entry_point: 'itoAuth'          # index.js에서 export한 변수명
+          gen2: true                           # 2세대(Cloud Run Functions) 사용
+          allow_unauthenticated: true          # 퍼블릭 접속 허용 (필요 시 false)
+          secret_environment_variables: 'NODE_ENV=projects/499796289115/secrets/NODE_ENV:latest'
+          secret_environment_variables: 'ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL:latest'
+          secret_environment_variables: 'GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID:latest'
+          secret_environment_variables: 'GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET:latest'
+          secret_environment_variables: 'PORT=projects/499796289115/secrets/PORT:latest'
+          
+      # 배포 완료 후 접속 URL 출력
+      - name: 'Show Function URL'
+        run: echo ${{ steps.deploy.outputs.url }}

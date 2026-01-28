@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const { google } = require('googleapis');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:3000';
 
 
@@ -183,6 +183,12 @@ app.post('/api/drive/downloadFile', async(req, res)=>{
 
 app.use(express.static(path.join(__dirname, '/static')));
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// 로컬 실행 시에만 서버를 띄움
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+// Cloud Functions를 위한 export
+module.exports = {itoAuth: app};
