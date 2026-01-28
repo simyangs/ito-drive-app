@@ -36,11 +36,7 @@ jobs:
           entry_point: 'itoAuth'          # index.js에서 export한 변수명
           gen2: true                           # 2세대(Cloud Run Functions) 사용
           allow_unauthenticated: true          # 퍼블릭 접속 허용 (필요 시 false)
-          secret_environment_variables: 'NODE_ENV=projects/499796289115/secrets/NODE_ENV:latest'
-          secret_environment_variables: 'ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL:latest'
-          secret_environment_variables: 'GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID:latest'
-          secret_environment_variables: 'GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET:latest'
-          secret_environment_variables: 'PORT=projects/499796289115/secrets/PORT:latest'
+          secret_environment_variables: 'NODE_ENV=projects/499796289115/secrets/NODE_ENV:latest,ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL:latest,GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET:latest,PORT=projects/499796289115/secrets/PORT:latest'
           
       # 배포 완료 후 접속 URL 출력
       - name: 'Show Function URL'
