@@ -30,6 +30,7 @@ jobs:
         id: deploy
         uses: 'google-github-actions/deploy-cloud-functions@v2'
         with:
+          project_id: 'project-73578cea-db67-4e8e-b50'
           name: 'express-app-func'             # 배포될 함수 이름
           runtime: 'nodejs20'                  # Node.js 버전
           region: 'asia-northeast3'            # 서울 리전
