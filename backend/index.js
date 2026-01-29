@@ -13,7 +13,7 @@ const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:3000';
 
 // === 미들웨어 설정 ===
 app.use(cors({
-  origin: ORIGIN_URL, // 프론트엔드 주소 (Vite 기본 포트)
+  origin: 'https://simyangs.github.io', // 프론트엔드 주소 (Vite 기본 포트)
   credentials: true, // 쿠키 주고받기 허용 (필수)
 }));
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
@@ -44,8 +44,8 @@ app.post('/api/auth/google', async (req, res) => {
       const isProd = process.env.NODE_ENV === 'production';
       res.cookie('refreshToken', tokens.refresh_token, {
         httpOnly: true,  // 자바스크립트로 접근 불가 (XSS 방지)
-        secure: isProd,  // 배포 시(HTTPS) 필수
-        sameSite: isProd ? 'none' : 'lax', // 크로스 도메인 쿠키 전송을 위해 배포 시 'none' 필요
+        secure: true,  // 배포 시(HTTPS) 필수
+        sameSite: 'none', // 크로스 도메인 쿠키 전송을 위해 배포 시 'none' 필요
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30일
         path: '/',
       });
