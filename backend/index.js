@@ -19,7 +19,8 @@ app.use(cors({
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
 app.use(express.json());
 //app.options('*', cors());
-
+// 보안상 전체를 찍지 말고 앞의 몇 글자만 찍어서 확인해 보세요.
+console.log("Client ID starts with:", process.env.GOOGLE_CLIENT_ID?.substring(0, 10));
 // === Google OAuth2 클라이언트 설정 ===
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
