@@ -9,11 +9,11 @@ const app = express();
 const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:3000';
 
 
-console.log('ORIGIN_URL', ORIGIN_URL);
+console.log(`ORIGIN_URL: [${ORIGIN_URL}]`);
 
 // === 미들웨어 설정 ===
 app.use(cors({
-  origin: ORIGIN_URL, // 프론트엔드 주소 (Vite 기본 포트)
+  origin: ORIGIN_URL.trim(), // 프론트엔드 주소 (Vite 기본 포트)
   credentials: true, // 쿠키 주고받기 허용 (필수)
 }));
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
