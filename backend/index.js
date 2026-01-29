@@ -9,7 +9,7 @@ const app = express();
 const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:3000';
 
 
-
+console.log('ORIGIN_URL', ORIGIN_URL);
 
 // === 미들웨어 설정 ===
 app.use(cors({
