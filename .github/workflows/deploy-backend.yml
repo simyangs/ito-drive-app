@@ -36,7 +36,7 @@ jobs:
             --source=backend \
             --trigger-http \
             --allow-unauthenticated \
-            --set-secrets="NODE_ENV=NODE_ENV:latest,ORIGIN_URL=ORIGIN_URL:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest,PORT=PORT:latest"
+            --set-secrets="NODE_ENV=NODE_ENV:latest,ORIGIN_URL=ORIGIN_URL:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest"
           
       - name: 'Show Function URL'
         run: echo ${{ steps.deploy.outputs.url }}
