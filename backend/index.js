@@ -18,6 +18,7 @@ app.use(cors({
 }));
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
 app.use(express.json());
+app.options('*', cors());
 
 // === Google OAuth2 클라이언트 설정 ===
 const oauth2Client = new google.auth.OAuth2(
@@ -182,14 +183,6 @@ app.post('/api/drive/downloadFile', async(req, res)=>{
 });
 
 app.use(express.static(path.join(__dirname, '/static')));
-
-const isLocal = !process.env.K_SERVICE && !process.env.FUNCTION_TARGET;
-
-if (isLocal) {
-  app.listen(PORT, () => {
-    console.log(`Local server running on http://localhost:${PORT}`);
-  });
-}
 
 // Cloud Functions를 위한 export
 module.exports = {itoAuth: app};
