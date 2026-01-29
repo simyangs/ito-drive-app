@@ -18,7 +18,7 @@ app.use(cors({
 }));
 app.use(cookieParser()); // 쿠키 파싱 미들웨어
 app.use(express.json());
-app.options('*', cors());
+//app.options('*', cors());
 
 // === Google OAuth2 클라이언트 설정 ===
 const oauth2Client = new google.auth.OAuth2(
