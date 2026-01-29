@@ -183,10 +183,11 @@ app.post('/api/drive/downloadFile', async(req, res)=>{
 
 app.use(express.static(path.join(__dirname, '/static')));
 
-// 로컬 실행 시에만 서버를 띄움
-if (process.env.NODE_ENV !== 'production' || require.main === module) {
+const isLocal = !process.env.K_SERVICE && !process.env.FUNCTION_TARGET;
+
+if (isLocal) {
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Local server running on http://localhost:${PORT}`);
   });
 }
 
