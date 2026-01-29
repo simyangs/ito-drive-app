@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
 
 jobs:
   deploy:
@@ -28,7 +31,7 @@ jobs:
       - id: 'deploy'
         name: 'Deploy to Cloud Run Functions via gcloud'
         run: |
-          gcloud functions deploy express-api-service \
+          gcloud functions deploy express-api-service \ 
             --gen2 \
             --runtime=nodejs20 \
             --region=asia-northeast3 \
