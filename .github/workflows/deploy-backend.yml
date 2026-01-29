@@ -17,31 +17,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Google Auth
-        id: auth
+      # 1. WIF를 사용하여 Google Cloud 인증
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/499796289115/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: '499796289115-compute@developer.gserviceaccount.com'
+          workload_identity_provider: '${{ secrets.GCP_WIF_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SA_EMAIL }}'
 
-      - name: 'Deploy to Cloud Run Functions'
-        id: deploy
+      - id: 'deploy'
+        name: 'Deploy to Cloud Run Functions'
         uses: 'google-github-actions/deploy-cloud-functions@v2'
         with:
-          project_id: 'project-73578cea-db67-4e8e-b50'
-          name: 'express-app-func'
-          runtime: 'nodejs20'
-          region: 'asia-northeast3'
-          source_dir: 'backend'
-          entry_point: 'itoAuth'
-          gen2: true
-          
-          # [수정] service_account 대신 service_account_email 사용
-          service_account_email: '499796289115-compute@developer.gserviceaccount.com'
-          
-          allow_unauthenticated: true
-          
-          # [수정] 시크릿 경로 뒤에 /versions/latest 추가 및 콤마 제거
+          name: 'express-api-service'      # 배포될 함수 이름
+          runtime: 'nodejs20'              # 노드 버전 (프로젝트에 맞춰 수정)
+          region: 'asia-northeast3'        # 서울 리전
+          entry_point: 'itoAuth'         # index.js에서 export한 Express 변수명
+          gen2: true                       # 2세대 설정 (Cloud Run 기반)
+          trigger_http: true               # HTTP 트리거 활성화
+          allow_unauthenticated: true      # 외부 공개 API인 경우 (보안 필요 시 제거)
           secret_environment_variables: |
             NODE_ENV=projects/499796289115/secrets/NODE_ENV/versions/latest
             ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL/versions/latest
