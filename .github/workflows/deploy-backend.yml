@@ -40,11 +40,11 @@ jobs:
           service_account: '499796289115-compute@developer.gserviceaccount.com'
           allow_unauthenticated: true          # 퍼블릭 접속 허용 (필요 시 false)
           secret_environment_variables: |
-            'NODE_ENV=projects/499796289115/secrets/NODE_ENV,
-             ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL,
-             GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID,
-             GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET,
-             PORT=projects/499796289115/secrets/PORT'
+            NODE_ENV=projects/499796289115/secrets/NODE_ENV,
+            ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL,
+            GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID,
+            GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET,
+            PORT=projects/499796289115/secrets/PORT
           
       # 배포 완료 후 접속 URL 출력
       - name: 'Show Function URL'
