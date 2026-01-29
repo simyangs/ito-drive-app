@@ -3,13 +3,12 @@ name: Deploy Express App to Cloud Run Functions
 on:
   push:
     branches:
-      - main  # 코드가 main 브랜치에 push될 때 실행됩니다.
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # WIF 인증을 위해 id-token 권한이 반드시 필요합니다.
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -22,7 +21,6 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-          # 우리가 설정한 WIF 프로바이더 경로 (camelCase 주의!)
           workload_identity_provider: 'projects/499796289115/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: '499796289115-compute@developer.gserviceaccount.com'
 
@@ -31,21 +29,25 @@ jobs:
         uses: 'google-github-actions/deploy-cloud-functions@v2'
         with:
           project_id: 'project-73578cea-db67-4e8e-b50'
-          name: 'express-app-func'             # 배포될 함수 이름
-          runtime: 'nodejs20'                  # Node.js 버전
-          region: 'asia-northeast3'            # 서울 리전
+          name: 'express-app-func'
+          runtime: 'nodejs20'
+          region: 'asia-northeast3'
           source_dir: 'backend'
-          entry_point: 'itoAuth'          # index.js에서 export한 변수명
-          gen2: true                           # 2세대(Cloud Run Functions) 사용
-          service_account: '499796289115-compute@developer.gserviceaccount.com'
-          allow_unauthenticated: true          # 퍼블릭 접속 허용 (필요 시 false)
-          secret_environment_variables: |
-            NODE_ENV=projects/499796289115/secrets/NODE_ENV,
-            ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL,
-            GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID,
-            GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET,
-            PORT=projects/499796289115/secrets/PORT
+          entry_point: 'itoAuth'
+          gen2: true
           
-      # 배포 완료 후 접속 URL 출력
+          # [수정] service_account 대신 service_account_email 사용
+          service_account_email: '499796289115-compute@developer.gserviceaccount.com'
+          
+          allow_unauthenticated: true
+          
+          # [수정] 시크릿 경로 뒤에 /versions/latest 추가 및 콤마 제거
+          secret_environment_variables: |
+            NODE_ENV=projects/499796289115/secrets/NODE_ENV/versions/latest
+            ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL/versions/latest
+            GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID/versions/latest
+            GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET/versions/latest
+            PORT=projects/499796289115/secrets/PORT/versions/latest
+          
       - name: 'Show Function URL'
         run: echo ${{ steps.deploy.outputs.url }}
