@@ -26,23 +26,17 @@ jobs:
           service_account: '${{ secrets.GCP_SA_EMAIL }}'
 
       - id: 'deploy'
-        name: 'Deploy to Cloud Run Functions'
-        uses: 'google-github-actions/deploy-cloud-functions@v2'
-        with:
-          name: 'express-api-service'      # 배포될 함수 이름
-          runtime: 'nodejs20'              # 노드 버전 (프로젝트에 맞춰 수정)
-          region: 'asia-northeast3'        # 서울 리전
-          entry_point: 'itoAuth'         # index.js에서 export한 Express 변수명
-          source_dir: 'backend'
-          gen2: true                       # 2세대 설정 (Cloud Run 기반)
-          trigger_http: true               # HTTP 트리거 활성화
-          allow_unauthenticated: true      # 외부 공개 API인 경우 (보안 필요 시 제거)
-          secret_environment_variables: |
-            NODE_ENV=projects/499796289115/secrets/NODE_ENV/versions/latest
-            ORIGIN_URL=projects/499796289115/secrets/ORIGIN_URL/versions/latest
-            GOOGLE_CLIENT_ID=projects/499796289115/secrets/GOOGLE_CLIENT_ID/versions/latest
-            GOOGLE_CLIENT_SECRET=projects/499796289115/secrets/GOOGLE_CLIENT_SECRET/versions/latest
-            PORT=projects/499796289115/secrets/PORT/versions/latest
+        name: 'Deploy to Cloud Run Functions via gcloud'
+        run: |
+          gcloud functions deploy express-api-service \
+            --gen2 \
+            --runtime=nodejs20 \
+            --region=asia-northeast3 \
+            --entry-point=itoAuth \
+            --source=backend \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-secrets="NODE_ENV=NODE_ENV:latest,ORIGIN_URL=ORIGIN_URL:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest,PORT=PORT:latest"
           
       - name: 'Show Function URL'
         run: echo ${{ steps.deploy.outputs.url }}
