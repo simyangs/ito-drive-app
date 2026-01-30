@@ -25,6 +25,10 @@ const oauth2Client = new google.auth.OAuth2(
   'postmessage' // React useGoogleLogin flow: 'auth-code' 사용 시 리다이렉트 URI 대신 사용
 );
 
+app.get('/', (req, res)=> {
+  res.send('Hello ito-drive-api');
+});
+
 // ==========================================
 // 1. 로그인 & 토큰 교환 API
 // ==========================================
