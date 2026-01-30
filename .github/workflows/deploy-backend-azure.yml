@@ -27,7 +27,6 @@ jobs:
       - name: Deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v1
         with:
-          appSourcePath: ${{ github.workspace }}/backend-azure
           acrName: ${{ secrets.REGISTRY_USERNAME }}
           containerAppName: ito-drive-app  # 실제 ACA 이름
           resourceGroup: ito-drive-group        # 리소스 그룹 이름
