@@ -1,0 +1,35 @@
+name: Deploy backend-azure to Azure Functions
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'backend-azure/**'
+      - '.github/workflows/deploy-backend-azure.yml'
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and push image to ACR
+        run: |
+          az acr login --name ${{ secrets.REGISTRY_USERNAME }}
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/ito-drive-app:${{ github.sha }} ./backend-azure
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/ito-drive-app:${{ github.sha }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }}/backend-azure
+          acrName: ${{ secrets.REGISTRY_USERNAME }}
+          containerAppName: your-container-app-name  # 실제 ACA 이름
+          resourceGroup: your-resource-group        # 리소스 그룹 이름
+          imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/ito-drive-app:${{ github.sha }}
+          targetPort: 8080  # Dockerfile에서 EXPOSE한 포트
