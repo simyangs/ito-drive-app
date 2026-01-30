@@ -29,7 +29,7 @@ jobs:
         with:
           appSourcePath: ${{ github.workspace }}/backend-azure
           acrName: ${{ secrets.REGISTRY_USERNAME }}
-          containerAppName: your-container-app-name  # 실제 ACA 이름
-          resourceGroup: your-resource-group        # 리소스 그룹 이름
+          containerAppName: ito-drive-api  # 실제 ACA 이름
+          resourceGroup: ito-drive-group        # 리소스 그룹 이름
           imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/ito-drive-app:${{ github.sha }}
           targetPort: 8080  # Dockerfile에서 EXPOSE한 포트
